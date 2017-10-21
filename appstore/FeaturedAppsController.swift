@@ -13,7 +13,6 @@ class FeaturedAppsController: UICollectionViewController, UICollectionViewDelega
     private let cellId = "cellId"
     private let largeCellId = "largeCellId"
     private let headerId = "headerId"
-    private let footerId = "footerId"
     
     var appCategories: [AppCategory]?
     var featuredApps: FeaturedApps?
@@ -21,7 +20,7 @@ class FeaturedAppsController: UICollectionViewController, UICollectionViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Featured Apps"
+        navigationItem.title = "Featured"
         
         AppCategory.fetchFeaturedApps { (featuredApps) in
             self.featuredApps = featuredApps
@@ -33,7 +32,6 @@ class FeaturedAppsController: UICollectionViewController, UICollectionViewDelega
         collectionView?.register(CategoryCell.self, forCellWithReuseIdentifier: cellId)
         collectionView?.register(LargeCategoryCell.self, forCellWithReuseIdentifier: largeCellId)
         collectionView?.register(Header.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerId)
-        collectionView?.register(Footer.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: footerId)
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -77,28 +75,10 @@ class FeaturedAppsController: UICollectionViewController, UICollectionViewDelega
         return CGSize(width: view.frame.width, height: 120)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 50)
-    }
-    
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 
-        let cell: CategoryCell?
-        
-        switch kind {
-        case UICollectionElementKindSectionFooter:
-            cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footerId, for: indexPath) as! Footer
-        default:
-            cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! Header
-            cell?.appCategory = featuredApps?.bannerCategory
-        }
-        
-        return cell!
-    }
-}
-
-class Footer: CategoryCell {
-    override func setupViews() {
-        backgroundColor = UIColor.gray
+        let cell = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerId, for: indexPath) as! Header
+        cell.appCategory = featuredApps?.bannerCategory
+        return cell
     }
 }

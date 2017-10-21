@@ -20,11 +20,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         
-        let layout = UICollectionViewFlowLayout()
-        let featuredAppsController = FeaturedAppsController(collectionViewLayout: layout)
+//        let layout = UICollectionViewFlowLayout()
+//        let featuredAppsController = FeaturedAppsController(collectionViewLayout: layout)
+//
+//        window?.rootViewController = UINavigationController(rootViewController: featuredAppsController)
         
-        window?.rootViewController = UINavigationController(rootViewController: featuredAppsController)
+        let tabBarController = UITabBarController()
+        
+        tabBarController.viewControllers = [
+            createTabBarController(controller: FeaturedAppsController(collectionViewLayout: UICollectionViewFlowLayout()), title: "Featured", imageName: "recent"),
+            createTabBarController(controller: UIViewController(),title: "Calls", imageName: "calls"),
+            createTabBarController(controller: UIViewController(),title: "Groups", imageName: "groups"),
+            createTabBarController(controller: UIViewController(),title: "People", imageName: "people"),
+            createTabBarController(controller: UIViewController(), title: "Settings", imageName:  "settings")
+        ]
+        
+        window?.rootViewController = tabBarController
+        
         return true
+    }
+    
+    private func createTabBarController(controller: UIViewController, title: String, imageName: String) -> UINavigationController {
+        let navController = UINavigationController(rootViewController: controller)
+        navController.tabBarItem.title = title
+        navController.tabBarItem.image = UIImage(named: imageName)
+        return navController
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
